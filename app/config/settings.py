@@ -26,20 +26,19 @@ SECRET_KEY = 's16f5wrc+-!l_e0&q-r(95cba2_nlp)ze-gb=z_@&@(4j!61(t'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
-
+AUTH_USER_MODEL = 'members.User'
 # Application definition
 
 INSTALLED_APPS = [
     'members.apps.MembersConfig',
-    'posts.apps.PostConfig',
+    'posts.apps.PostsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django-extensions',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
