@@ -23,7 +23,7 @@ class PostImage(models.Model):
     각 포스트의 사진
     """
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    image = models.ImageField()
+    image = models.ImageField(upload_to='posts/images')
 
 
 class PostComment(models.Model):
