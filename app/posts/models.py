@@ -17,6 +17,9 @@ class Post(models.Model):
     like_users = models.ManyToManyField(User, through='PostLike', related_name='like_post_set')
     created = models.DateTimeField(default=timezone.now)
 
+    def __str__(self):
+        return self.author.username
+
 
 class PostImage(models.Model):
     """
