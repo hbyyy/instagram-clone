@@ -19,9 +19,9 @@ def login_view(request):
         print(user)
         if user is not None:
             login(request, user)
-            return redirect('index')
-        else:
             return redirect('posts:post_list')
+        else:
+            return redirect('members:login')
 
     else:
         return render(request, 'members/login.html')
