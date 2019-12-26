@@ -1,5 +1,7 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+
+from members.models import User
 
 
 def index(request):
@@ -8,5 +10,10 @@ def index(request):
     :param request:
     :return:
     """
-    return render(request, 'index.html')
+
+    if request.user.is_authenticated is True:
+        return redirect('posts:post_list')
+
+    else:
+        return render(request, 'index.html')
 

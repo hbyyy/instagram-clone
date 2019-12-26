@@ -21,7 +21,7 @@ def login_view(request):
             login(request, user)
             return redirect('index')
         else:
-            return redirect('members:login')
+            return redirect('posts:post_list')
 
     else:
         return render(request, 'members/login.html')
