@@ -13,6 +13,7 @@ def index(request):
 
     if request.user.is_authenticated is True:
         return redirect('posts:post_list')
+        # return render(request, 'posts/post-list.html')
 
     else:
         return render(request, 'index.html')
