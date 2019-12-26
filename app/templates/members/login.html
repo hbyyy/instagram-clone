@@ -1,20 +1,57 @@
-
 {% extends 'base.html' %}
 
 
 {% block content %}
-<h1>login page!!</h1>
-<form action="{% url 'members:login' %}" method="post">
-    {% csrf_token %}
-    <div>
-        <p>id</p>
-        <input type="text" name="username">
+    {#<h1>login page!!</h1>#}
+    {#<form action="{% url 'members:login' %}" method="post">#}
+    {#    {% csrf_token %}#}
+    {#    <div>#}
+    {#        <p>id</p>#}
+    {#        <input type="text" name="username">#}
+    {#    </div>#}
+    {#    <div>#}
+    {#        <p>password</p>#}
+    {#        <input type="text" name="password">#}
+    {#    </div>#}
+    {#    <br>#}
+    {#    <button type="submit">login</button>#}
+    {#</form>#}
+
+    <div class="container-fluid">
+        <div class="mr-auto ml-auto mt-3
+                    col-lg-4
+                    col-md-6
+                    col-sm-8
+                    col-10">
+            <div class="top-box card text-center p-4">
+                <h1 class="mb-5">Instagram</h1>
+
+                <form action="">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="휴대폰 번호 또는 이메일 주소">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="성명">
+                    </div>
+
+
+                    <button type="submit" class="btn btn-primary btn-block mb-3">로그인</button>
+                    <hr>
+
+
+                </form>
+                <button class="btn btn-block btn-outline-primary mb-3">Facebook으로 로그인</button>
+                <a href="" class="">비밀번호를 잊으셨나요?</a>
+
+            </div>
+
+            <div class="card text-center p-4 mt-3 mb-3">
+                <span>계정이 없으신가요?</span>
+                <a href="">회원가입</a>
+
+
+            </div>
+
+        </div>
     </div>
-    <div>
-        <p>password</p>
-        <input type="text" name="password">
-    </div>
-    <br>
-    <button type="submit">login</button>
-</form>
 {% endblock %}
