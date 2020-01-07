@@ -2,9 +2,24 @@
 
 {% block content %}
     {% for post in posts %}
-        <div class="card">
+        <div class="container-fluid">
+            <div class="card col-10  ml-auto mr-auto">
             <p>{{ post.content }}</p>
-            <p>{{ post.created }}</p>
+            <p class="text-right">{{ post.created }}</p>
+            <form action="{% url 'posts:post-like' pk=post.id %}" class="form-group" method="post">
+                {% csrf_token %}
+
+{#                {% if user in post.like_users.all %}#}
+                {% if post in user.like_post_set.all %}
+                    <div>좋아요 눌린 상태</div>
+                {% else %}
+                    <div>좋아요 안 눌린 상태</div>
+                {% endif %}
+                <button type="submit" class="btn btn-primary float-right">like</button>
+
+
+            </form>
+        </div>
         </div>
     {% endfor %}
     {#    <h1>post list!!!</h1>#}
