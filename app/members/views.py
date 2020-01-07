@@ -1,9 +1,9 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-
 # Create your views here.
+from members.models import User
 
 
 def login_view(request):
@@ -26,9 +26,16 @@ def login_view(request):
     else:
         return render(request, 'members/login.html')
 
+
+def logout_view(request):
+    logout(request)
+    return redirect('index')
+
+
 def signup_view(request):
     """
-    Template: intex.html 사용
+
+    Template: index.html 사용
                 action만 이쪽으로
     URL : /members/signup
 
@@ -44,6 +51,18 @@ def signup_view(request):
     "이미 사용중인 username/email입니다" 라는 메시지를 HttpResponse로 돌려준다.
 
     생성에 성공하면 로그인 처리 후 (위의 login_view를 참조) posts:post-list로 redirection처리
-    :param request:
-    :return:
+
     """
+    username = request.POST['username']
+    email = request.POST['email']
+    name = request.POST['name']
+    password = request.POST['password']
+
+    user_check = User.objects.filter(username=username).exists()
+    email_check = User.objects.filter(email=email).exists()
+    if user_check is True or email_check is True:
+        return HttpResponse(f'이미 사용중인 username/email입니다')
+
+    user = User.objects.create_user(username=username, password=password, email=email, name=name)
+    login(request, user)
+    return redirect('posts:post_list')
