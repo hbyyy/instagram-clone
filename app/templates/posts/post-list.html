@@ -12,29 +12,21 @@
         <a href="{% url 'posts:post-create' %}">포스트 추가</a>
     </div>
     <div class="container-fluid">
-        {% for post in posts %}
+    {% for post in posts %}
 
-            <div class="col-10  ml-auto mr-auto border mb-5">
+            <div class="card col-10  ml-auto mr-auto">
                 <p>{{ post.content }}</p>
                 <p class="text-right">{{ post.created }}</p>
                 {% for postimage in post.postimage_set.all %}
-
-                    <!--
-                        이 포스트가 가진 모든 PostImage를 추력
-                        <img src="무언가.image.url">
-                    -->
+                <div>
+                <!--
+                    이 포스트가 가진 모든 PostImage를 추력
+                    <img src="무언가.image.url">
+                -->
                     <img src="{{ postimage.image.url }}" alt="">
-                    {#                        <p>{{ postimage.image.url }}</p>#}
-
-                {% endfor %}
-                <ul>
-                    {% for postcomment in post.postcomment_set.all %}
-                        <li>
-                            <b>Author : {{ postcomment.author }}</b>
-                            <span>내용 : {{ postcomment.content }}</span>
-                        </li>
+                    <p>{{ postimage.image.url }}</p>
+                </div>
                     {% endfor %}
-                </ul>
                 <form action="{% url 'posts:post-like' pk=post.id %}" class="form-group" method="post">
                     {% csrf_token %}
 
@@ -44,19 +36,14 @@
                     {% else %}
                         <button type="submit" class="btn btn-outline-primary float-right">like</button>
                     {% endif %}
+
+
+
                 </form>
-
-                <form action="{% url 'posts:comment-create' post_pk=post.id %}" method="post">
-                    {% csrf_token %}
-
-                    {{ form }}
-                    <button type="submit" class="float">작성</button>
-                </form>
-
             </div>
 
 
-        {% endfor %}
+    {% endfor %}
 
     </div>
 

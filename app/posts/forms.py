@@ -7,18 +7,7 @@ class PostCreateForm(forms.Form):
         Image
         text
     """
-    image = forms.ImageField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
+
+    image = forms.ImageField()
     content = forms.CharField(max_length=200)
 
-
-class CommentCreateForm(forms.Form):
-    # content = forms.CharField(max_length=200)
-    content = forms.CharField(
-        widget=forms.Textarea()
-    )
-
-    def save(self, post, author):
-        return post.postcomment_set.create(
-            author=author,
-            content=self.cleaned_data['content']
-        )

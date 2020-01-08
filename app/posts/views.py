@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from posts.forms import PostCreateForm, CommentCreateForm
+from posts.forms import PostCreateForm
 from posts.models import Post, PostLike, PostImage
 
 
@@ -9,8 +9,7 @@ def post_list(request):
     # URL = /posts/
     # template: templates/posts/post-list.html
     posts = Post.objects.order_by('-pk')
-    form = CommentCreateForm()
-    context = dict(posts=posts, form=form)
+    context = dict(posts=posts)
 
     return render(request, 'posts/post-list.html', context)
 
@@ -61,53 +60,17 @@ def post_create(request):
     """
 
     if request.method == 'POST':
-        images = request.FILES.getlist('image')
+        image = request.FILES['image']
         content = request.POST['content']
 
         post = Post.objects.create(author=request.user, content=content)
-
-        for image in images:
-            PostImage.objects.create(post=post, image=image)
+        postimage = PostImage.objects.create(post=post, image=image)
 
         return redirect('posts:post_list')
-
+        pass
     else:
         form = PostCreateForm()
         context = {
             'form': form
         }
         return render(request, 'posts/post-create.html', context)
-
-
-def comment_create(request, post_pk):
-    """
-    url : /posts/<int:post_pk>/comments/create/
-    Template: dqjtdma(post-list.html에 Form을 구현)
-    post-list.html 내부에서, 각 Post마다 자신에게 연결된 PostComment목록을 보여주도록 한다
-        <ul>
-            <li><b>작성자명</b><span>내용</span></li>
-            <li><b>작성자명</b><span>내용</span></li>
-        </ul>
-    Form: post.forms.CommentCreateForm
-    :param request:
-    :param post_pk:
-    :return:
-    """
-    if request.method == 'POST':
-        user = request.user
-        post = Post.objects.get(pk=post_pk)
-        # content = request.POST['content']
-        # Form instance를 만드는데, data에 request.POST로 전달된 dict를 입력
-        form = CommentCreateForm(data=request.POST)
-        # Form 인스턴스 생성시, 주어진 데이터가 해당 Form이 가진 Field들에 적절한 데이터인지 검증
-        if form.is_valid():
-            # 검증에 통과한 경우, 통과한 데이터들은 Form 인스턴스의 'cleaned_date속성에 포함됨
-            # content = form.cleaned_data['content']
-            # PostComment.objects.create(
-            #     author=user,
-            #     post=post,
-            #     content=content
-
-            form.save(post=post, author=request.user)
-
-        return redirect('posts:post_list')
