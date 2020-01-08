@@ -3,9 +3,13 @@
 {% block content %}
     <div class="text-center">User: {{ request.user }}</div>
     <div class="text-center">Authenticate : {{ request.user.is_authenticated }}</div>
-    <form action="{% url 'members:logout' %}">
-        <button type="submit" class="btn btn-danger">logout</button>
-    </form>
+
+    <div>
+        <a href="{% url 'members:logout' %}">logout</a>
+    </div>
+    <div>
+        <a href="{% url 'posts:post-create' %}">포스트 추가</a>
+    </div>
     <div class="container-fluid">
     {% for post in posts %}
 
@@ -17,11 +21,11 @@
 
                     {#                {% if user in post.like_users.all %}#}
                     {% if post in user.like_post_set.all %}
-                        <div>좋아요 눌린 상태</div>
+                        <button type="submit" class="btn btn-primary float-right">like 취소</button>
                     {% else %}
-                        <div>좋아요 안 눌린 상태</div>
+                        <button type="submit" class="btn btn-outline-primary float-right">like</button>
                     {% endif %}
-                    <button type="submit" class="btn btn-primary float-right">like</button>
+
 
 
                 </form>

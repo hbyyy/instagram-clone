@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from posts.models import Post, PostLike
+from posts.forms import PostCreateForm
+from posts.models import Post, PostLike, PostImage
 
 
 def post_list(request):
@@ -45,3 +46,31 @@ def post_like(request, pk):
     #     like1 = PostLike.objects.create(post=post, user=request.user)
     #
     # return redirect('posts:post_list')
+
+
+def post_create(request):
+    """
+    url:        /posts/create name='post-create'
+    Template:   /posts/posts-create.html
+
+    forms.PostCreateForm을 생성한다.
+
+    :param request:
+    :return:
+    """
+
+    if request.method == 'POST':
+        image = request.FILES['image']
+        content = request.POST['content']
+
+        post = Post.objects.create(author=request.user, content=content)
+        postimage = PostImage.objects.create(post=post, image=image)
+
+        return redirect('posts:post_list')
+        pass
+    else:
+        form = PostCreateForm()
+        context = {
+            'form': form
+        }
+        return render(request, 'posts/post-create.html', context)
