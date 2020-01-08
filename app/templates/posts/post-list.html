@@ -1,8 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <div class="text-center">User: {{ request.user }}</div>
+    <div class="text-center">Authenticate : {{ request.user.is_authenticated }}</div>
+    <form action="{% url 'members:logout' %}">
+        <button type="submit" class="btn btn-danger">logout</button>
+    </form>
+    <div class="container-fluid">
     {% for post in posts %}
-        <div class="container-fluid">
+
             <div class="card col-10  ml-auto mr-auto">
                 <p>{{ post.content }}</p>
                 <p class="text-right">{{ post.created }}</p>
@@ -21,11 +27,12 @@
                 </form>
             </div>
 
-        </div>
+
     {% endfor %}
-    <form action="{% url 'members:logout' %}">
-        <button type="submit" class="btn btn-danger align-items-center">logout</button>
-    </form>
+
+    </div>
+
+
     {#    <h1>post list!!!</h1>#}
     {#    <ul>#}
     {#        {% for post in posts %}#}

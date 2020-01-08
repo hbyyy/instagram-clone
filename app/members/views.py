@@ -1,9 +1,13 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib.auth.hashers import check_password
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 # Create your views here.
 from members.models import User
+
+# 장고 기본유저나 Custom
+User = get_user_model()
 
 
 def login_view(request):
@@ -29,7 +33,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('index')
+    return redirect('members:login')
 
 
 def signup_view(request):
