@@ -37,7 +37,7 @@ class LoginForm(forms.Form):
 
 
 class SignupForm(forms.Form):
-    email = forms.CharField(max_length=20, widget=forms.TextInput(
+    email = forms.EmailField(max_length=20, widget=forms.EmailInput(
         attrs={
             'class': 'form-control',
             'placeholder': 'email',
@@ -49,7 +49,7 @@ class SignupForm(forms.Form):
             'placeholder': 'username',
         }
     ))
-    name = forms.CharField(max_length=20,  widget=forms.TextInput(
+    name = forms.CharField(max_length=20, widget=forms.TextInput(
         attrs={
             'class': 'form-control',
             'placeholder': 'name',
@@ -63,19 +63,37 @@ class SignupForm(forms.Form):
         }
     ))
 
-    def clean(self):
-        username_check = User.objects.filter(username=self.cleaned_data['username']).exists()
+    # def clean(self):
+    #     username_check = User.objects.filter(username=self.cleaned_data['username']).exists()
+    #     email_check = User.objects.filter(email=self.cleaned_data['email']).exists()
+    #     if username_check is True:
+    #         raise forms.ValidationError('이미 존재하는 username입니다')
+    #     elif email_check is True:
+    #         raise forms.ValidationError('이미 존재하는 email입니다')
+    #     else:
+    #         return self.cleaned_data
+
+    def clean_email(self):
         email_check = User.objects.filter(email=self.cleaned_data['email']).exists()
-        if username_check is True or email_check is True:
-            raise forms.ValidationError('이미 존재하는 username/password입니다')
+        if email_check is True:
+            raise forms.ValidationError('이미 존재하는 email입니다')
         else:
-            return self.cleaned_data
+            return self.cleaned_data['email']
+
+    def clean_username(self):
+        username_check = User.objects.filter(username=self.cleaned_data['username']).exists()
+        if username_check is True:
+            raise forms.ValidationError('이미 존재하는 username입니다')
+        else:
+            return self.cleaned_data['username']
 
     def save(self):
 
         return User.objects.create_user(
             username=self.cleaned_data['username'],
+            # username=self.cleaned_username(),
             password=self.cleaned_data['password'],
             name=self.cleaned_data['name'],
             email=self.cleaned_data['email']
+            # email=self.clean_email()
         )
