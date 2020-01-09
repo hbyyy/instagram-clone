@@ -12,21 +12,21 @@
         <a href="{% url 'posts:post-create' %}">포스트 추가</a>
     </div>
     <div class="container-fluid">
-    {% for post in posts %}
+        {% for post in posts %}
 
             <div class="card col-10  ml-auto mr-auto">
                 <p>{{ post.content }}</p>
                 <p class="text-right">{{ post.created }}</p>
                 {% for postimage in post.postimage_set.all %}
-                <div>
-                <!--
-                    이 포스트가 가진 모든 PostImage를 추력
-                    <img src="무언가.image.url">
-                -->
-                    <img src="{{ postimage.image.url }}" alt="">
-                    <p>{{ postimage.image.url }}</p>
-                </div>
-                    {% endfor %}
+                    <div>
+                        <!--
+                            이 포스트가 가진 모든 PostImage를 추력
+                            <img src="무언가.image.url">
+                        -->
+                        <img src="{{ postimage.image.url }}" alt="">
+                        <p>{{ postimage.image.url }}</p>
+                    </div>
+                {% endfor %}
                 <form action="{% url 'posts:post-like' pk=post.id %}" class="form-group" method="post">
                     {% csrf_token %}
 
@@ -38,12 +38,29 @@
                     {% endif %}
 
 
-
                 </form>
+                <div>
+                    <ul>
+                        {% for comment in post.postcomment_set.all %}
+                            <li>
+                                <b>{{ comment.author.username }}</b>
+                                <span>{{ comment.content }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <div>
+                        <!-- Comment를 작성하는 Form -->
+                        <form action="{% url 'posts:comment-create' post_pk=post.pk %}" method="POST">
+                            {% csrf_token %}
+                            {{ comment_form }}
+                            <button type="submit">작성</button>
+                        </form>
+                    </div>
+                </div>
             </div>
 
 
-    {% endfor %}
+        {% endfor %}
 
     </div>
 

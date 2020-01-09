@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 # Create your views here.
+from members.forms import LoginForm
 from members.models import User
 
 # 장고 기본유저나 Custom
@@ -25,9 +26,12 @@ def login_view(request):
             return redirect('posts:post_list')
         else:
             return redirect('members:login')
+    form = LoginForm()
+    context = {
+        'form': form,
+    }
 
-    else:
-        return render(request, 'members/login.html')
+    return render(request, 'members/login.html', context)
 
 
 def logout_view(request):
