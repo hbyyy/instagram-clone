@@ -1,5 +1,4 @@
-from django.contrib.auth import authenticate, login, logout, get_user_model
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth import login, logout, get_user_model
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
@@ -17,16 +16,24 @@ def login_view(request):
     :param request:
     :return:
     """
+
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
+        form = LoginForm(data=request.POST)
+        if form.is_valid():
+            form.login(request)
             return redirect('posts:post_list')
-        else:
-            return redirect('members:login')
-    form = LoginForm()
+
+        # username = request.POST['username']
+        # password = request.POST['password']
+        # user = authenticate(request, username=username, password=password)
+        # if user is not None:
+        #     login(request, user)
+        #     return redirect('posts:post_list')
+        # else:
+        #     return redirect('members:login')
+    else:
+        form = LoginForm()
+
     context = {
         'form': form,
     }

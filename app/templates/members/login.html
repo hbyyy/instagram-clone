@@ -43,11 +43,21 @@
                 {#                </form>#}
                 <form action="" method="post">
                     {% csrf_token %}
+{#                    <div>{{ form.errors }}</div>#}
                     {% for field in form %}
                         <div class="form-group">
+                            {#                            <p>{{ field.errors }}</p>#}
                             {{ field }}
                         </div>
                     {% endfor %}
+
+                    {% if form.non_field_errors %}
+                        <ul class="list-unstyled text-danger">
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error|escape }}</li>
+                        {% endfor %}
+                    {% endif %}
+                    </ul>
                     <button class="btn btn-primary btn-block">로그인</button>
                 </form>
                 <hr>
