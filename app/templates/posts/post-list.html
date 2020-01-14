@@ -15,7 +15,7 @@
         {% for post in posts %}
 
             <div class="card col-10  ml-auto mr-auto">
-                <p>{{ post.content }}</p>
+                <div>{{ post.content_html | safe}}</div>
                 <p class="text-right">{{ post.created }}</p>
                 {% for postimage in post.postimage_set.all %}
                     <div>

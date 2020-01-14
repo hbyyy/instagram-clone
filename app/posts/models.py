@@ -17,6 +17,7 @@ class Post(models.Model):
 
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField(blank=True)
+    content_html = models.TextField(blank=True)
     like_users = models.ManyToManyField(User, through='PostLike', related_name='like_post_set')
     tags = models.ManyToManyField('Tag', verbose_name='해시태그 목록', related_name='posts', blank=True)
     created = models.DateTimeField(default=timezone.now)
@@ -24,13 +25,20 @@ class Post(models.Model):
     def __str__(self):
         return self.author.username
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
+    def _save_html(self):
+        self.content_html = re.sub(self.TAG_PATTERNS, r'<a href="/explore/tags/\g<1>">#\g<1></a>', self.content)
+
+    def _save_tags(self):
         tag_name_list = list(set(re.findall(self.TAG_PATTERNS, self.content)))
         tags = []
         for tag in tag_name_list:
             tags.append(Tag.objects.get_or_create(name=tag)[0])
         self.tags.set(tags)
+
+    def save(self, *args, **kwargs):
+        self._save_html()
+        super().save(*args, **kwargs)
+        self._save_tags()
 
 
 class PostImage(models.Model):

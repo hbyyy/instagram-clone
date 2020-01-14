@@ -16,13 +16,15 @@ class PostCreateForm(forms.Form):
         )
     )
 
-    content = forms.CharField(max_length=200)
+    content = forms.CharField(max_length=200, widget=forms.Textarea())
 
 
 class CommentCreateForm(forms.Form):
     content = forms.CharField(
-        max_length=10,
-        widget=forms.Textarea()
+        max_length=20,
+        widget=forms.Textarea(
+
+        )
     )
 
     def save(self, post, author):

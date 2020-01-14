@@ -26,12 +26,13 @@ class PostAdmin(admin.ModelAdmin):
     fieldsets = [(None, {'fields': ['tags']}),
                  (None, {'fields': ['author']}),
                  ('Contents', {'fields': ['content', 'created']}),
+                 ('Contents_html', {'fields': ['content_html']}),
                  ]
     list_display = ('author', 'content', 'created')
     list_display_links = ('author', 'content', 'created')
     inlines = [PostImageInline, PostCommentInline]
 
-    readonly_fields = ['tags',]
+    readonly_fields = ['tags', 'content_html']
 
 
 @admin.register(PostImage)
