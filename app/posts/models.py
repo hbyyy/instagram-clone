@@ -1,3 +1,5 @@
+import re
+
 from django.db import models
 from django.utils import timezone
 
@@ -11,14 +13,24 @@ class Post(models.Model):
     """
     인스타그램의 포스트
     """
+    TAG_PATTERNS = re.compile(r'#(\w+)')
 
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField(blank=True)
     like_users = models.ManyToManyField(User, through='PostLike', related_name='like_post_set')
+    tags = models.ManyToManyField('Tag', verbose_name='해시태그 목록', related_name='posts', blank=True)
     created = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.author.username
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        tag_name_list = list(set(re.findall(self.TAG_PATTERNS, self.content)))
+        tags = []
+        for tag in tag_name_list:
+            tags.append(Tag.objects.get_or_create(name=tag)[0])
+        self.tags.set(tags)
 
 
 class PostImage(models.Model):
@@ -47,3 +59,22 @@ class PostLike(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_date = models.DateTimeField(auto_now_add=True)
+
+
+class Tag(models.Model):
+    """
+    HashTag의 Tag를 담당
+    Post 입장에서 post.add()로 연결된 전페 Tag를 불러 올 수 있어야 함
+    Tag입장에서 tah.posts.all()로 연결된 전페 Post를 불러올 수 있어야 함
+
+    Django admin에서 결과를 볼 수 있도록 admin.py에 적절히 내용 기록
+
+    중개모델(Intermediate model()을 사용할 필요 없음
+    """
+
+    name = models.CharField("태그명", max_length=100)
+
+    # posts = models.ManyToManyField(Post)
+
+    def __str__(self):
+        return self.name

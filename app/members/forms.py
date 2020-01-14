@@ -73,7 +73,12 @@ class SignupForm(forms.Form):
     #     else:
     #         return self.cleaned_data
 
+    def clean(self):
+        print(f'{self.__class__.__name__}, clean')
+        super().clean()
+
     def clean_email(self):
+        print(f'{self.__class__.__name__}, clean_email')
         email_check = User.objects.filter(email=self.cleaned_data['email']).exists()
         if email_check is True:
             raise forms.ValidationError('이미 존재하는 email입니다')
@@ -81,6 +86,7 @@ class SignupForm(forms.Form):
             return self.cleaned_data['email']
 
     def clean_username(self):
+        print(f'{self.__class__.__name__}, clean_username')
         username_check = User.objects.filter(username=self.cleaned_data['username']).exists()
         if username_check is True:
             raise forms.ValidationError('이미 존재하는 username입니다')
@@ -88,7 +94,7 @@ class SignupForm(forms.Form):
             return self.cleaned_data['username']
 
     def save(self):
-
+        print(f'{self.__class__.__name__}, save')
         return User.objects.create_user(
             username=self.cleaned_data['username'],
             # username=self.cleaned_username(),
