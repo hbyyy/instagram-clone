@@ -2,10 +2,10 @@ from django.shortcuts import render, redirect
 
 # Create your views here.
 from posts.forms import PostCreateForm, CommentCreateForm
-from posts.models import Post, PostLike, PostImage
+from posts.models import Post, PostLike
 
 
-def post_list(request):
+def post_list(request, tag=None):
     # 1. 로그인 완료 후 이 페이지로 이동하도록 함
     # 2. index에 접근할 때 로그인이 되어 있다면, 이 페이지로 이동하도록 함
     #    로그인이 되어있는지 확인:
@@ -21,13 +21,35 @@ def post_list(request):
     # 'posts'라는 키로 모든 Post QuerySet을 전달
     #  (순서는 pk의 역순)
     # 그리고 전달받은 QuerySet을 순회하며 적절히 Post내용을 출력
-    posts = Post.objects.order_by('-pk')
+    if tag is not None:
+        posts = Post.objects.filter(tags__name__iexact=tag).order_by('-pk')
+    else:
+        posts = Post.objects.order_by('-pk')
     comment_form = CommentCreateForm()
     context = {
         'posts': posts,
         'comment_form': comment_form,
     }
     return render(request, 'posts/post-list.html', context)
+
+#
+# def post_list_by_tag(request, tag):
+#     """
+#     URL:        /explore/tags/<tag문자열>/
+#     template:   /posts/post-list.html
+#
+#     <tag문자열>인 Tag를 자신(post).tags에 가지고 있는 경우의 Post 목록만 돌려줘야 함
+#     이 내용 외에는 위의 post_list와 내용 동일
+#
+#     """
+#     # URL: /explore/tags/<tag문자열>/
+#     posts = Post.objects.filter(tags__name__iexact=tag).order_by('-pk')
+#     comment_form = CommentCreateForm()
+#     context = {
+#         'posts': posts,
+#         'comment_form': comment_form,
+#     }
+#     return render(request, 'posts/post-list.html', context)
 
 
 def post_like(request, pk):
