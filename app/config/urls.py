@@ -34,4 +34,3 @@ urlpatterns += static(
     # document_root 위치에서 나머지 path에 해당하는 파일을 리턴
     document_root=settings.MEDIA_ROOT,
 )
-print(urlpatterns)
