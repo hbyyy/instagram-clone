@@ -103,6 +103,7 @@ def post_create(request):
 
         post = Post.objects.create(author=request.user, content=content)
         for image in images:
+            print(image, type(image))
             post.postimage_set.create(image=image)
 
         return redirect('posts:post_list')

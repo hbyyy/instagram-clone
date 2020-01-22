@@ -1,4 +1,6 @@
+import requests
 from django.contrib.auth import login, logout, get_user_model
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 # Create your views here.
@@ -32,8 +34,21 @@ def login_view(request):
     else:
         form = LoginForm()
 
+    login_base_url = 'https://nid.naver.com/oauth2.0/authorize'
+    login_pattern = {
+        'response_type': 'code',
+        'client_id': 'ee6QeTwBsL1kM2f2_O7f',
+        'redirect_uri': 'http://localhost:8000/members/naver-login/',
+        'state': 'RANDOM_STATE'
+    }
+    login_url = '{base}?{params}'.format(
+        base=login_base_url,
+        params='&'.join(f'{key}={value}' for key, value in login_pattern.items())
+    )
+    print(login_url)
     context = {
         'form': form,
+        'login_url': login_url
     }
 
     return render(request, 'members/login.html', context)
@@ -42,6 +57,53 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('members:login')
+
+
+def naver_login(request):
+    try:
+        code = request.GET['code']
+        state = request.GET['state']
+    except KeyError:
+        return HttpResponse('code나 state 값이 없습니다')
+
+    # 토큰 받아오기
+    token_base_url = 'https://nid.naver.com/oauth2.0/token'
+    url_params = {
+        'grant_type': 'authorization_code',
+        'client_id': 'ee6QeTwBsL1kM2f2_O7f',
+        'client_secret': 'i3yjBIvSnC',
+        'redirect_uri': 'http://localhost:8000/members/naver-login/',
+        'code': code,
+        'state': state
+    }
+
+    token_url = '{base}?{params}'.format(
+        base=token_base_url,
+        params='&'.join(f'{key}={value}' for key, value in url_params.items())
+    )
+
+    response = requests.get(token_url)
+    # access_token = json.loads(response.text)['access_token']
+    access_token = response.json()['access_token']
+
+    # 받아온 토큰 이용해서 unique_id를 받아온다
+    header = {
+        "Authorization": "Bearer " + access_token
+    }
+    profile_base_url = 'https://openapi.naver.com/v1/nid/me'
+    response = requests.get(profile_base_url, headers=header)
+
+    unique_id = response.json()['response']['id']
+
+    user_check = User.objects.filter(username=f'n_{unique_id}').exists()
+
+    if user_check is True:
+        user = User.objects.get(username=f'n_{unique_id}')
+    else:
+        user = User.objects.create_user(username=f'n_{unique_id}')
+
+    login(request, user)
+    return redirect('posts:post_list')
 
 
 def signup_view(request):

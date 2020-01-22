@@ -36,7 +36,11 @@ SECRET_KEY = 's16f5wrc+-!l_e0&q-r(95cba2_nlp)ze-gb=z_@&@(4j!61(t'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '54.180.86.244',
+]
 AUTH_USER_MODEL = 'members.User'
 # Application definition
 
@@ -89,8 +93,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'instagram',
+        'USER': 'hby',
+        'PASSWORD': 'hby940228',
+        'HOST': 'wps-hby.cgl3xekxzz5k.ap-northeast-2.rds.amazonaws.com',
+        'PORT': 5432,
     }
 }
 
