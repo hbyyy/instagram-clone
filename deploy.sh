@@ -1,8 +1,8 @@
 #!/usr/bin/env sh
 IDENTITY_FILE="$HOME/.ssh/wps12thself.pem"
 HOST="ubuntu@54.180.86.244"
-ORIGIN_SOURCE="$HOME/projects/wps12th/python/instagram"
-DEST_SOURCE="/home/ubuntu/projects/instagram"
+ORIGIN_SOURCE="$HOME/projects/wps12th/python/instagram/"
+DEST_SOURCE="/home/ubuntu/projects/"
 SSH_CMD="ssh -i ${IDENTITY_FILE} ${HOST}"
 
 

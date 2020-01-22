@@ -27,6 +27,19 @@ STATICFILES_DIRS = [
     STATIC_DIR,
 ]
 
+#django-storages
+#Django의 FileStorage로 S3Boto3Storage를 사용
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+#instagram/secret-json파일을 읽어서 파이썬 객체롤 만든 다음 아래의 키에 적절히 채워준다.
+#비밀 키들을 모두 빼준다. -> 숙제
+AWS_ACCESS_KEY_ID = ''
+AWS_SECRET_ACCESS_KEY = ''
+AWS_STORAGE_BUCKET_NAME = 'wps-instagram-hby2'
+AWS_AUTO_CREATE_BUCKET = True
+AWS_S3_REGION_NAME = 'ap-northeast-2'
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
