@@ -14,16 +14,17 @@ pip freeze > requirements.txt
 echo '==runserver 배포=='
 # 기존 폴더 삭제
 echo '기존 폴더 삭제'
-${SSH_CND} sudo rm -rf ${DEST_SOURCE}
+${SSH_CMD} sudo rm -rf ${DEST_SOURCE}
 
 # 로컬에 있는 파일 업로드
 echo '로컬에 있는 파일 업로드'
+${SSH_CMD} mkdir -p ${DEST_SOURCE}
 scp -q -i "${IDENTITY_FILE}" -r "${ORIGIN_SOURCE}" ${HOST}:${DEST_SOURCE}
 
 # 서버에 패키지 설치
 echo '서버에 패키지 설치 중'
-${SSH_CMD} -C 'pip3 install -q -r /home/ubuntu/projects/instagram/requirements.txt'
 
+${SSH_CMD} pip3 install -q -r /home/ubuntu/projects/instagram/requirements.txt
 # 실행중이던 screen 종료
 echo '실행중이던 screen 종료'
 ${SSH_CMD} -C 'screen -X -S runserver quit'

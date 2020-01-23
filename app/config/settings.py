@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
-
+import json
 import os
 
 # Static files (CSS, JavaScript, Images)
@@ -27,24 +27,27 @@ STATICFILES_DIRS = [
     STATIC_DIR,
 ]
 
-#django-storages
-#Django의 FileStorage로 S3Boto3Storage를 사용
+# secret.json load
+with open(os.path.join(BASE_DIR, 'secret.json'), 'r') as secret_json:
+    secret = json.load(secret_json)
+
+# django-storages
+# django의 FileStorage로 S3Boto3Storage를 사용
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-#instagram/secret-json파일을 읽어서 파이썬 객체롤 만든 다음 아래의 키에 적절히 채워준다.
-#비밀 키들을 모두 빼준다. -> 숙제
-AWS_ACCESS_KEY_ID = ''
-AWS_SECRET_ACCESS_KEY = ''
+# instagram/secret-json파일을 읽어서 파이썬 객체롤 만든 다음 아래의 키에 적절히 채워준다.
+# 비밀 키들을 모두 빼준다. -> 숙제
+AWS_ACCESS_KEY_ID = secret['AWS_ACCESS_KEY_ID']
+AWS_SECRET_ACCESS_KEY = secret['AWS_SECRET_ACCESS_KEY']
 AWS_STORAGE_BUCKET_NAME = 'wps-instagram-hby2'
 AWS_AUTO_CREATE_BUCKET = True
 AWS_S3_REGION_NAME = 'ap-northeast-2'
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 's16f5wrc+-!l_e0&q-r(95cba2_nlp)ze-gb=z_@&@(4j!61(t'
+SECRET_KEY = secret['DJANGO_SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

@@ -1,9 +1,13 @@
+import json
+import os
+
 import requests
 from django.contrib.auth import login, logout, get_user_model
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 # Create your views here.
+from config.settings import BASE_DIR
 from members.forms import LoginForm, SignupForm
 
 # 장고 기본유저나 Custom
@@ -66,12 +70,14 @@ def naver_login(request):
     except KeyError:
         return HttpResponse('code나 state 값이 없습니다')
 
+    with open(os.path.join(BASE_DIR, 'secret.json'), 'r') as secret_json:
+        secret = json.load(secret_json)
     # 토큰 받아오기
     token_base_url = 'https://nid.naver.com/oauth2.0/token'
     url_params = {
         'grant_type': 'authorization_code',
         'client_id': 'ee6QeTwBsL1kM2f2_O7f',
-        'client_secret': 'i3yjBIvSnC',
+        'client_secret': secret['NAVER_CLIENT_SECRET_KEY'],
         'redirect_uri': 'http://localhost:8000/members/naver-login/',
         'code': code,
         'state': state
