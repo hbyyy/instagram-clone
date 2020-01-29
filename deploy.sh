@@ -35,7 +35,7 @@ ${SSH_CMD} -C 'screen -S runserver -d -m'
 
 # 실행중인 세션에 명령어 전달
 echo '서버 실행'
-${SSH_CMD} -C "screen -r runserver -X stuff 'sudo python3 /home/ubuntu/projects/instagram/app/manage.py runserver 0:8000\n'"
+  ${SSH_CMD} -C "screen -r runserver -X stuff 'sudo python3 /home/ubuntu/projects/instagram/app/manage.py runserver 0:8000\n'"
 
 echo '배포 완료'
 

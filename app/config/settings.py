@@ -18,6 +18,7 @@ import os
 STATIC_URL = '/static/'
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_DIR = os.path.dirname(BASE_DIR)
 MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
@@ -30,6 +31,8 @@ STATICFILES_DIRS = [
 # secret.json load
 with open(os.path.join(BASE_DIR, 'secret.json'), 'r') as secret_json:
     secret = json.load(secret_json)
+# secret_path = os.path.join(BASE_DIR, 'secret.json')
+#SECRET = json.load(open(secrets_path))
 
 # django-storages
 # django의 FileStorage로 S3Boto3Storage를 사용
@@ -55,7 +58,8 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    '54.180.86.244',
+    '52.78.84.148',
+    '15.164.226.135',
 ]
 AUTH_USER_MODEL = 'members.User'
 # Application definition
