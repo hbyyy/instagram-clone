@@ -70,7 +70,10 @@ ${SSH_CMD} -C "sudo chmod 666 /var/run/docker.sock"
 echo '서버 실행'
 #도커 이미지 업데이트
 ${SSH_CMD} -C "docker pull lloasd33/wps-instagram"
-# 서버 실
+
+#로컬의 aws profile을 전달
+scp -q -i ${IDENTITY_FILE} -r $HOME/.aws ${TARGET}:$HOME/
+# 서버 실행 asd
 ${SSH_CMD} -C "screen -r runserver -X stuff 'docker run --rm -it --name instagram -p 8001:8000 lloasd33/wps-instagram\n'"
 echo "finish!"
 

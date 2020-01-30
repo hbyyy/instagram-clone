@@ -11,6 +11,23 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 import json
 import os
+import boto3
+
+
+secret_name = 'wps'
+region_name = 'ap-northeast-2'
+session = boto3.session.Session(
+    profile_name='wps-secrets-manager',
+    region_name=region_name
+)
+
+client = session.client(
+    service_name='secretsmanager',
+    region_name=region_name
+)
+
+secret_string = client.get_secret_value(SecretId='wps')['SecretString']
+secret = json.loads(secret_stringAWS)['instagram']
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
@@ -29,10 +46,10 @@ STATICFILES_DIRS = [
 ]
 
 # secret.json load
-with open(os.path.join(BASE_DIR, 'secret.json'), 'r') as secret_json:
-    secret = json.load(secret_json)
+# with open(os.path.join(BASE_DIR, 'secret.json'), 'r') as secret_json:
+#     secret = json.load(secret_json)
 # secret_path = os.path.join(BASE_DIR, 'secret.json')
-#SECRET = json.load(open(secrets_path))
+# SECRET = json.load(open(secrets_path))
 
 # django-storages
 # django의 FileStorage로 S3Boto3Storage를 사용
