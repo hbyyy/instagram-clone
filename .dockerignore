@@ -1,2 +1,7 @@
 /.git
 /.media
+app/secret.json
+/deploy-docker.sh
+/deploy.sh
+/docker-run-server.py
+/docker-run-local.py
