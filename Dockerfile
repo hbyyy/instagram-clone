@@ -10,6 +10,6 @@ COPY        . /srv/instagram
 WORKDIR     /srv/instagram/app
 RUN         mkdir /var/log/gunicorn
 
+RUN         rm /etc/nginx/sites-enabled/default
 RUN         cp /srv/instagram/.config/instagram.nginx /etc/nginx/sites-enabled/
-RUN         cp /srv/instagram/.config/instagram_server.nginx /etc/nginx/sites-enabled/
 

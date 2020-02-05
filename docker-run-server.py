@@ -19,8 +19,8 @@ def run(cmd, ignore_error=False):
         process.check_returncode()
 
 
-def ssh_run(cmd):
-    run(f'ssh -i {IDENTITY_FILE} {TARGET} -C {cmd}')
+def ssh_run(cmd, ignore_error=False):
+    run(f'ssh -i {IDENTITY_FILE} {TARGET} -C {cmd}', ignore_error=ignore_error)
 
 
 DOCKER_IMAGE_TAG = 'lloasd33/wps-instagram'
@@ -50,7 +50,7 @@ def server_pull_run():
     print('========================server_pull_run===============================')
     ssh_run(f'docker stop instagram')
     ssh_run(f'docker pull {DOCKER_IMAGE_TAG}')
-    ssh_run(f'sudo docker run -d --rm -it -p 8000:80 --name=instagram lloasd33/wps-instagram /bin/bash')
+    ssh_run(f'sudo docker run -d --rm -it -p 80:80 --name=instagram lloasd33/wps-instagram /bin/bash')
 
 
 def copy_secret():
@@ -64,8 +64,9 @@ def server_run():
     # ssh_run(f'docker exec -it -d instagram python manage.py runserver 0:8000')
     # ssh_run(f'docker exec -it -d instagram gunicorn -b unix:/run/instagram_server.sock config.wsgi')
     # ssh_run(f'docker exec -it -d instagram nginx -g \"daemon off;\"')
+    # ssh_run(f'docker exec -d instagram /usr/sbin/nginx -s stop', ignore_error=True)
     ssh_run(f'docker exec -d instagram python manage.py collectstatic')
-    ssh_run(f'docker exec -d instagram supervisord -c ../.config/supervisord_server.conf -n')
+    ssh_run(f'docker exec -d instagram supervisord -c ../.config/supervisord.conf -n')
 
 
 if __name__ == '__main__':
