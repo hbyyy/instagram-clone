@@ -33,6 +33,7 @@ def run(cmd):
 
 
 if __name__ == '__main__':
+    run('poetry export -f requirements.txt > requirements.txt')
     run('docker build -t  lloasd33/wps-instagram -f Dockerfile .')
     run('docker stop instagram')
     run('docker run {options} lloasd33/wps-instagram /bin/bash'.format(
@@ -42,11 +43,14 @@ if __name__ == '__main__':
 
     run(f'docker cp {SECRETS_FILE} instagram:/srv/instagram/app')
 
-    # run('docker exec -it -d instagram {cmd}'.format(
-    #     cmd=' '.join(arg.cmd) if arg.cmd else '/bin/bash'
-    # ))
-
     run('docker exec -it -d instagram python manage.py collectstatic')
-    run('docker exec -it -d instagram nginx -g \"daemon off;\"')
-    run(f'docker exec -it instagram gunicorn -b unix:/run/instagram.sock config.wsgi')
+
+    run('docker exec -it instagram {cmd}'.format(
+        cmd=' '.join(arg.cmd) if arg.cmd else 'supervisord -c ../.config/supervisord.conf -n'
+    ))
+
+    # run('docker exec -it -d instagram python manage.py collectstatic')
+    # run('docker exec -it supervisord -c ../.config/supervisord.conf -n')
+    # run('docker exec -it -d instagram nginx -g \"daemon off;\"')
+    # run(f'docker exec -it instagram gunicorn -b unix:/run/instagram.sock config.wsgi')
 

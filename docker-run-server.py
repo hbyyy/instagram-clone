@@ -58,8 +58,10 @@ def copy_secret():
 def server_run():
     print('=========================server_run==============================')
     # ssh_run(f'docker exec -it -d instagram python manage.py runserver 0:8000')
-    ssh_run(f'docker exec -it -d instagram gunicorn -b unix:/run/instagram.sock config.wsgi')
-    ssh_run(f'docker exec -it -d instagram nginx -g "daemon off;"')
+    # ssh_run(f'docker exec -it -d instagram gunicorn -b unix:/run/instagram_server.sock config.wsgi')
+    # ssh_run(f'docker exec -it -d instagram nginx -g \"daemon off;\"')
+    ssh_run(f'docker exec -d instagram python manage.py collectstatic')
+    ssh_run(f'docker exec -d instagram supervisord -c ../.config/supervisord_server.conf -n')
 
 
 if __name__ == '__main__':
