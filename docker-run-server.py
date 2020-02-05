@@ -25,6 +25,10 @@ def ssh_run(cmd):
 
 DOCKER_IMAGE_TAG = 'lloasd33/wps-instagram'
 
+def requirements_update():
+    print(f'=========================requirements_update==============================')
+    run('poetry export -f requirements.txt > requirements.txt')
+
 
 # 1 도커 이미지 업데이트
 def local_build_push():
@@ -66,6 +70,7 @@ def server_run():
 
 if __name__ == '__main__':
     try:
+        requirements_update()
         local_build_push()
         server_init()
         server_pull_run()
