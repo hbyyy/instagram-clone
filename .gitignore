@@ -1,4 +1,5 @@
 requirements.txt
+
 # Created by https://www.gitignore.io/api/git,linux,macos,python,django,windows,pycharm+all,jupyternotebooks,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=git,linux,macos,python,django,windows,pycharm+all,jupyternotebooks,visualstudiocode
 
@@ -14,6 +15,7 @@ media
 
 
 /.media
+/.static
 secret.json
 # If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/
 # in your Git repository. Update and uncomment the following line accordingly.

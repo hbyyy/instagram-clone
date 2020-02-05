@@ -24,7 +24,7 @@
                             <img src="무언가.image.url">
                         -->
                         <img src="{{ postimage.image.url }}" alt="">
-                        <p>{{ postimage.image.url }}</p>
+{#                        <p>{{ postimage.image.url }}</p>#}
                     </div>
                 {% endfor %}
                 <form action="{% url 'posts:post-like' pk=post.id %}" class="form-group" method="post">

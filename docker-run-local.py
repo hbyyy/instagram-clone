@@ -23,7 +23,7 @@ def run(cmd):
 
 
 if __name__ == '__main__':
-    run('docker build -t lloasd33/wps-instagram -f Dockerfile .')
+    run('docker build -t  lloasd33/wps-instagram -f Dockerfile .')
     run('docker stop instagram')
     run('docker run {options} lloasd33/wps-instagram /bin/bash'.format(
         options=' '.join([
@@ -33,5 +33,5 @@ if __name__ == '__main__':
     run(f'docker cp {SECRETS_FILE} instagram:/srv/instagram/app')
 
 
-    run(f'docker exec -it -d instagram gunicorn -b unix:/run/instagram.sock config.wsgi')
-    run(f'docker exec -it -d instagram nginx -g "daemon off;"')
+    # run(f'docker exec -it -d instagram gunicorn -b unix:/run/instagram.sock config.wsgi')
+    # run(f'docker exec -it -d instagram nginx -g "daemon off;"')

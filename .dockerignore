@@ -1,7 +1,16 @@
 /.git
 /.media
-app/secret.json
+/app/secret.json
 /deploy-docker.sh
 /deploy.sh
 /docker-run-server.py
 /docker-run-local.py
+/Dockerfile
+/secretsmanager.ipynb
+/poetry.lock
+/pyproject.toml
+/.gitignore
+/Untitled.ipynb
+/app/.ipynb_checkpoints
+/app/db.sqlite3
+/.static
