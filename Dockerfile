@@ -10,3 +10,4 @@ COPY        . /srv/instagram
 WORKDIR     /srv/instagram/app
 
 RUN         cp /srv/instagram/.config/instagram.nginx /etc/nginx/sites-enabled/
+
