@@ -5,7 +5,7 @@ server {
     # HTTP요청의 Host값 (URL에 입력한 도메인)
 
     # 로컬에서 테스트
-    server_name localhost;
+    server_name default_server;
 
     charset utf-8;
 
@@ -23,3 +23,5 @@ server {
     }
 
 }
+
+
