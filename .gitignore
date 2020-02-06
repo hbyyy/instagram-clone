@@ -1,5 +1,6 @@
 requirements.txt
 secretsmanager.ipynb
+/.cert
 # Created by https://www.gitignore.io/api/git,linux,macos,python,django,windows,pycharm+all,jupyternotebooks,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=git,linux,macos,python,django,windows,pycharm+all,jupyternotebooks,visualstudiocode
 

@@ -60,6 +60,8 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     '52.78.84.148',
     '15.164.226.135',
+    'hbyyy.xyz',
+    'www.hbyyy.xyz',
 ]
 AUTH_USER_MODEL = 'members.User'
 # Application definition
