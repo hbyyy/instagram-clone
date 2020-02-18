@@ -1,6 +1,6 @@
 from django.urls import path
 
-from members import apis
+from .. import apis
 
 
 urlpatterns = [

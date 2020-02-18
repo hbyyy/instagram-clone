@@ -22,4 +22,3 @@ class AuthTokenAPIView(APIView):
             return Response(data)
         else:
             raise AuthenticationFailed()
-

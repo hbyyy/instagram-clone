@@ -22,13 +22,13 @@ from members.views import signup_view
 from posts.views import post_list
 
 urlpatterns_apis = [
-    path('members/', include('members.urls_apis'))
+    path('members/', include('members.urls.apis'))
 ]
 
 urlpatterns = [
     path('apis/', include(urlpatterns_apis)),
     path('admin/', admin.site.urls),
-    path('members/', include('members.urls')),
+    path('members/', include('members.urls.views')),
     path('posts/', include('posts.urls')),
     path('', signup_view, name='signup'),
     path('explore/tags/<str:tag>/', post_list, name='post-list-tag'),

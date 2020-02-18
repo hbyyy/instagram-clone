@@ -1,6 +1,6 @@
 from django.urls import path
 
-from members.views import login_view, signup_view, logout_view, naver_login
+from ..views import login_view, signup_view, logout_view, naver_login
 
 
 app_name = 'members'
