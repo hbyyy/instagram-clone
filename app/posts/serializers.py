@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from members.serialrizers import UserSerializer
-from .models import Post
+from .models import Post, PostImage
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -17,8 +17,15 @@ class PostSerializer(serializers.ModelSerializer):
         )
 
 
-class PostCreateSerializer(serializers.ModelSerializer):
+class PostImageCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostImage
+        fields = (
+            'image',
+        )
 
+
+class PostCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = (
