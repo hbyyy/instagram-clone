@@ -15,3 +15,15 @@ class PostSerializer(serializers.ModelSerializer):
             'content',
             'created'
         )
+
+
+class PostCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Post
+        fields = (
+            'content',
+        )
+
+    def to_representation(self, instance):
+        return PostSerializer(instance).data

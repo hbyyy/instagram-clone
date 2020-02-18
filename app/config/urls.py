@@ -34,6 +34,7 @@ urlpatterns = [
     path('', signup_view, name='signup'),
     path('explore/tags/<str:tag>/', post_list, name='post-list-tag'),
 ]
+
 urlpatterns += static(
     # URL 앞부분이 /media/이면
     prefix=settings.MEDIA_URL,
