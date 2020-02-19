@@ -62,3 +62,4 @@ class PostImageCreateAPIView(APIView):
 
         serializer = PostSerializer(post)
         return Response(serializer.data)
+
