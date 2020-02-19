@@ -1,9 +1,11 @@
-from rest_framework import generics
+from rest_framework import generics, status
+from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from posts.serializers import PostSerializer, PostCreateSerializer, PostImageCreateSerializer
-from .models import Post
+from posts.serializers import PostSerializer, PostCreateSerializer, PostImageCreateSerializer, PostCommentSerializer, \
+    PostCommentCreateSerializer
+from .models import Post, PostComment
 
 
 # class PostListCreateAPIView(APIView):
@@ -63,3 +65,34 @@ class PostImageCreateAPIView(APIView):
         serializer = PostSerializer(post)
         return Response(serializer.data)
 
+
+# class PostCommentListCreateAPIView(APIView):
+#     def get(self, request, post_pk):
+#         comments = PostComment.objects.filter(post__pk=post_pk)
+#         serializer = PostCommentSerializer(comments, many=True)
+#         return Response(serializer.data)
+#
+#     def post(self, request, post_pk):
+#         serializer = PostCommentCreateSerializer(data=request.data)
+#         post = get_object_or_404(Post, pk=post_pk)
+#         if serializer.is_valid():
+#             serializer.save(post=post, author=request.user)
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class PostCommentListCreateView(generics.ListCreateAPIView):
+
+    def get_queryset(self):
+        post_pk = self.kwargs.get('post_pk')
+        return PostComment.objects.filter(post=post_pk)
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return PostCommentSerializer
+        elif self.request.method == 'POST':
+            return PostCommentCreateSerializer
+
+    def perform_create(self, serializer):
+        post_pk = self.kwargs.get('post_pk')
+        post = get_object_or_404(Post, pk=post_pk)
+        serializer.save(post=post, author=self.request.user)

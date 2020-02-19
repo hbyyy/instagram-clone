@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from members.serialrizers import UserSerializer
-from .models import Post, PostImage
+from .models import Post, PostImage, PostComment
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -60,3 +60,26 @@ class PostImageCreateSerializer(serializers.ModelSerializer):
         fields = (
             'image',
         )
+
+
+class PostCommentSerializer(serializers.ModelSerializer):
+    author = UserSerializer()
+
+    class Meta:
+        model = PostComment
+        fields = (
+            'author',
+            'pk',
+            'content',
+        )
+
+
+class PostCommentCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostComment
+        fields = (
+            'content',
+        )
+
+    def to_representation(self, instance):
+        return PostCommentSerializer(instance).data
