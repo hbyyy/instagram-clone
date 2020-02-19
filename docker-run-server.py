@@ -48,9 +48,11 @@ def server_init():
 
 def server_pull_run():
     print('========================server_pull_run===============================')
-    ssh_run(f'docker stop instagram')
+    ssh_run(f'docker stop instagram', ignore_error=True)
     ssh_run(f'docker pull {DOCKER_IMAGE_TAG}')
-    ssh_run(f'sudo docker run -d --rm -it -p 80:80 --name=instagram lloasd33/wps-instagram /bin/bash')
+    ssh_run('''sudo docker run \
+            -d --rm -it -p 80:80 -p 443:443 --name=instagram -v /etc/letsencrypt:/etc/letsencrypt\
+            lloasd33/wps-instagram /bin/bash''')
 
 
 def copy_secret():

@@ -12,57 +12,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import json
 import os
 
-import boto3
-
-access_key = os.environ.get('AWS_SECRETS_MANAGER_ACCESS_KEY_ID')
-secret_key = os.environ.get('AWS_SECRETS_MANAGER_SECRET_ACCESS_KEY')
-
-region_name = 'ap-northeast-2'
-
-session_kwargs = {
-    'region_name': region_name,
-}
-
-if access_key and secret_key:
-    session_kwargs['aws_access_key_id'] = access_key
-    session_kwargs['aws_secret_access_key'] = secret_key
-else:
-    session_kwargs['profile_name'] = 'wps-secrets-manager'
-session = boto3.session.Session(**session_kwargs)
-
-client = session.client(
-    service_name='secretsmanager',
-    region_name=region_name,
-)
-
-# secret_name = 'wps'
-# region_name = 'ap-northeast-2'
-# session = boto3.session.Session(
-#     profile_name='wps-secrets-manager',
-#     region_name=region_name
-# )
-#
-# client = session.client(
-#     service_name='secretsmanager',
-#     region_name=region_name
-# )
-#
-secret_string = client.get_secret_value(SecretId='wps')['SecretString']
-SECRETS = json.loads(secret_string)['instagram']
-
-# from django_secrets import SECRETS
-# AWS_SECRETS_MANAGER_SECRETS_NAME = 'wps'
-# AWS_SECRETS_MANAGER_SECRETS_SECTION = 'instagram'
-# AWS_SECRETS_MANAGER_REGION_NAME = 'ap-northeast-2'
-# AWS_SECRETS_MANAGER_PROFILE = 'wps-secrets-manager'
-
-# django-secrets-manager의 SECRETS를 사용해서 비밀 값 할당
-# AWS_ACCESS_KEY_ID = SECRETS['AWS_ACCESS_KEY_ID']
-# AWS_SECRET_ACCESS_KEY = SECRETS['AWS_SECRET_ACCESS_KEY']
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
-
 STATIC_URL = '/static/'
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -72,15 +21,15 @@ ROOT_DIR = os.path.dirname(BASE_DIR)
 MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
 MEDIA_URL = '/media/'
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(ROOT_DIR, '.static')
 STATICFILES_DIRS = [
     STATIC_DIR,
 ]
 
 # secret.json load
-# with open(os.path.join(BASE_DIR, 'secret.json'), 'r') as secret_json:
-#     secret = json.load(secret_json)
-# secret_path = os.path.join(BASE_DIR, 'secret.json')
-# SECRET = json.load(open(secrets_path))
+
+secrets_path = os.path.join(BASE_DIR, 'secret.json')
+SECRETS = json.load(open(secrets_path))['instagram']
 
 # django-storages
 # django의 FileStorage로 S3Boto3Storage를 사용
@@ -108,6 +57,8 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     '52.78.84.148',
     '15.164.226.135',
+    'hbyyy.xyz',
+    'www.hbyyy.xyz',
 ]
 AUTH_USER_MODEL = 'members.User'
 # Application definition
@@ -122,7 +73,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'rest_framework',
+    'rest_framework.authtoken',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication'
+    ]
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -131,8 +91,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',]
 
 ROOT_URLCONF = 'config.urls'
 
@@ -161,12 +120,8 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'instagram',
-        'USER': 'hby',
-        'PASSWORD': 'hby940228',
-        'HOST': 'wps-hby.cgl3xekxzz5k.ap-northeast-2.rds.amazonaws.com',
-        'PORT': 5432,
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 

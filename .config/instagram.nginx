@@ -1,18 +1,33 @@
 server {
-    # 80번 포트로 온 요청에 응답할 Block이다
+
     listen 80;
-
-    # HTTP요청의 Host값 (URL에 입력한 도메인)
-
-    # 로컬에서 테스트
-    server_name default_server;
-
+    server_name hbyyy.xyz www.hbyyy.xyz;
     charset utf-8;
 
-    #root로부터의 요청에 대해 응답할 Block
+    #let's encrypt
+    location /.well-known/acme-challenge/ {
+        alias       /srv/instagram/.cert/;
+    }
+
+    # .well-known외의 모든 요청을 https로 다시 요청하도록 redirect
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    #443번 포트 : https 용  -> aws 에 추가해줘야 한다.
+    listen 443 ssl;
+    server_name hbyyy.xyz www.hbyyy.xyz;
+    charset utf-8;
+
+    ssl on;
+    ssl_certificate         /etc/letsencrypt/live/www.hbyyy.xyz/fullchain.pem;
+    ssl_certificate_key     /etc/letsencrypt/live/www.hbyyy.xyz/privkey.pem;
 
     location / {
-        # /run/gunicorn.sock파일을 사용해서Gunicorn에 소켓통신하는 proxy 꾸성
+        # 일반적으로 proxy로 넘겨줄 경우 필요한 설정
+        include         /etc/nginx/proxy_params;
         proxy_pass      http://unix:/run/instagram.sock;
     }
 
@@ -21,7 +36,6 @@ server {
     location /static/ {
         alias       /srv/instagram/.static/;
     }
-
 }
 
 

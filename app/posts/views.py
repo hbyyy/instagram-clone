@@ -1,8 +1,9 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 # Create your views here.
 from posts.forms import PostCreateForm, CommentCreateForm
-from posts.models import Post, PostLike
+from posts.models import Post, PostLike, PostComment
 
 
 def post_list(request, tag=None):
@@ -31,6 +32,7 @@ def post_list(request, tag=None):
         'comment_form': comment_form,
     }
     return render(request, 'posts/post-list.html', context)
+
 
 #
 # def post_list_by_tag(request, tag):
@@ -134,3 +136,8 @@ def comment_create(request, post_pk):
         if form.is_valid():
             form.save(post=post, author=request.user)
         return redirect('posts:post_list')
+
+
+def comment_list(request, post_pk):
+    comments = PostComment.objects.filter(post=post_pk)
+    return render(request, 'comment_list.html', context={'comments': comments})
