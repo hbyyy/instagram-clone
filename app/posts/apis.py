@@ -1,9 +1,9 @@
-from rest_framework import generics, status
+from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from posts.serializers import PostSerializer, PostCreateSerializer, PostImageCreateSerializer
-from .models import Post, PostImage
+from .models import Post
 
 
 # class PostListCreateAPIView(APIView):
@@ -35,27 +35,30 @@ class PostListCreateAPIView(generics.ListCreateAPIView):
         serializer.save(author=self.request.user)
 
 
+# 숙제 해본것
+# class PostImageCreateAPIView(APIView):
+#     def post(self, request, pk):
+#         # 여러장의 이미지를 받아서
+#         # 특정 Post에 연결되는 PostImage를 생성
+#         # /posts/1/images
+#         result = []
+#         for image in request.data.getlist('image'):
+#             serializer = PostImageCreateSerializer(data={'image': image})
+#             if serializer.is_valid():
+#                 serializer.save(post=Post.objects.get(pk=pk))
+#                 result.append(serializer.data)
+#             else:
+#                 return Response(serializer.errors)
+#         return Response(result)
+
+# 숙제 풀이
 class PostImageCreateAPIView(APIView):
     def post(self, request, pk):
-        # 여러장의 이미지를 받아서
-        # 특정 Post에 연결되는 PostImage를 생성
-        # /posts/1/images
-        result = []
+        post = Post.objects.get(pk=pk)
         for image in request.data.getlist('image'):
             serializer = PostImageCreateSerializer(data={'image': image})
             if serializer.is_valid():
-                serializer.save(post=Post.objects.get(pk=pk))
-                result.append(serializer.data)
-            else:
-                return Response(serializer.errors)
-        return Response(result)
+                serializer.save(post=post)
 
-
-
-        # images = request.data.getlist('image')
-        # post = Post.objects.get(pk=pk)
-        # for image in images:
-        #     PostImage.objects.create(post=post, image=image)
-        #
-        # serializer = PostSerializer(post)
-        # return Response(serializer.data)
+        serializer = PostSerializer(post)
+        return Response(serializer.data)

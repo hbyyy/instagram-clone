@@ -13,16 +13,17 @@ class PostSerializer(serializers.ModelSerializer):
             'pk',
             'author',
             'content',
-            'created'
+            'created',
+            'postimage_set',
         )
 
-
-class PostImageCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PostImage
-        fields = (
-            'image',
-        )
+# 숙제 해본
+# class PostImageCreateSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = PostImage
+#         fields = (
+#             'image',
+#         )
 
 
 class PostCreateSerializer(serializers.ModelSerializer):
@@ -34,3 +35,12 @@ class PostCreateSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         return PostSerializer(instance).data
+
+
+# 숙제 풀
+class PostImageCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostImage
+        fields = (
+            'image',
+        )
