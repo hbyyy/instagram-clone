@@ -1,3 +1,4 @@
+from django.utils.decorators import method_decorator
 from rest_framework import generics, status
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
@@ -80,6 +81,7 @@ class PostImageCreateAPIView(APIView):
 #             return Response(serializer.data, status=status.HTTP_201_CREATED)
 #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@method_decorator()
 class PostCommentListCreateView(generics.ListCreateAPIView):
 
     def get_queryset(self):
